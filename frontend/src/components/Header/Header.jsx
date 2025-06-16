@@ -45,7 +45,9 @@ const Header = () => {
           </Button>
 
           <Link to={"/sign-in"}>
-            <Button className="cursor-pointer">Sign in</Button>
+            <Button className="cursor-pointer" outline>
+              Sign in
+            </Button>
           </Link>
 
           <NavbarToggle />
