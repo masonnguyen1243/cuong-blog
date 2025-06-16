@@ -49,3 +49,40 @@ export const signup = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const accountVerification = async (req, res) => {
+  try {
+    const { email, token } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (user.isActive) {
+      return res.status(400).json({
+        success: false,
+        message: "Your account already active! Please login!",
+      });
+    }
+
+    if (token !== user.verifyToken) {
+      return res.status(400).json({ success: false, message: "Invalid Token" });
+    }
+
+    user.isActive = true;
+    user.verifyToken = null;
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Verification successfully! Please login!",
+    });
+  } catch (error) {
+    console.log(`Error in accountVerification controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
