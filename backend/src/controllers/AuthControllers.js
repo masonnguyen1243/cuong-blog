@@ -2,6 +2,11 @@ import User from "../models/UserModel.js";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import SendEmail from "../utils/sendEmail.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/GenerateToken.js";
+import ms from "ms";
 
 export const signup = async (req, res) => {
   try {
@@ -83,6 +88,62 @@ export const accountVerification = async (req, res) => {
     });
   } catch (error) {
     console.log(`Error in accountVerification controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const signin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Missing inputs" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Account not found" });
+    }
+
+    if (!user.isActive) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Your account is not active" });
+    }
+
+    const isMatchPassword = await bcrypt.compare(password, user.password);
+    if (!isMatchPassword) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+
+    const accessToken = generateAccessToken(user._id, user.role);
+    const refreshToken = generateRefreshToken(user._id, user.role);
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: ms("7 days"),
+    };
+
+    res.cookie("accessToken", accessToken, cookieOptions);
+    res.cookie("refreshToken", refreshToken, cookieOptions);
+
+    const { password: pass, ...rest } = user._doc;
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged in successfully!",
+      data: { rest, accessToken, refreshToken },
+    });
+  } catch (error) {
+    console.log(`Error in login controller`);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
