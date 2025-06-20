@@ -10,7 +10,14 @@ const app = express();
 //Middlewares
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:5173",
+    optionsSuccessStatus: 200,
+    methods: "GET, PUT, DELETE, POST",
+  })
+);
 
 const PORT = ENV.PORT;
 

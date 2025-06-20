@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
   EMAIL_RULE,
@@ -8,8 +8,17 @@ import {
   PASSWORD_RULE_MESSAGE,
 } from "~/utils/validatos";
 import FieldErrorAlert from "~/components/Form/FieldErrorAlert";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { SignInUser } from "~/store/slice/authSlice";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isShowPassword, setIsShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -20,8 +29,17 @@ const SignIn = () => {
   const handleSignup = (data) => {
     const { email, password } = data;
 
-    console.log({ email, password });
-    reset();
+    toast
+      .promise(dispatch(SignInUser({ email, password })), {
+        pending: "Loading",
+      })
+      .then((res) => {
+        if (!res.error) {
+          navigate("/");
+          toast.success("Logged in successfully!");
+          reset();
+        }
+      });
   };
 
   return (
@@ -65,10 +83,10 @@ const SignIn = () => {
               <FieldErrorAlert errors={errors} fieldName={"email"} />
             </div>
 
-            <div className="">
+            <div className="relative">
               <label htmlFor="password">Password</label>
               <input
-                type="password"
+                type={isShowPassword ? "text" : "password"}
                 placeholder="Your password"
                 id="password"
                 {...register("password", {
@@ -80,6 +98,12 @@ const SignIn = () => {
                 })}
                 className="px-4 py-2 border border-gray-400 rounded-lg mt-1 bg-gray-50 w-full"
               />
+              <div
+                onClick={() => setIsShowPassword(!isShowPassword)}
+                className="absolute right-4 cursor-pointer select-none top-[50%] translate-y-[50%]"
+              >
+                {isShowPassword ? <FaEye /> : <FaEyeSlash />}
+              </div>
               <FieldErrorAlert errors={errors} fieldName={"password"} />
             </div>
 
