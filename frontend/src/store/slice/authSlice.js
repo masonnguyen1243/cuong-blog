@@ -19,6 +19,20 @@ export const SignUpUser = createAsyncThunk("auth/SignUpUser", async (data) => {
   return response.data;
 });
 
+export const SignInWithGoogle = createAsyncThunk(
+  "auth/SignInWithGoogle",
+  async (data) => {
+    const response = await authorizeAxiosInstance.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`,
+      data
+    );
+
+    console.log(response.data);
+
+    return response.data;
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -37,6 +51,11 @@ const authSlice = createSlice({
       .addCase(SignUpUser.fulfilled, (state) => {
         state.loading = false;
         state.error = null;
+      })
+      .addCase(SignInWithGoogle.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = action.payload;
       });
   },
 });

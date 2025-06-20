@@ -13,6 +13,7 @@ import { SignInUser } from "~/store/slice/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import OAuth from "~/components/auth/OAuth";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -113,6 +114,7 @@ const SignIn = () => {
             >
               Sign In
             </button>
+            <OAuth />
           </form>
 
           <div className="flex gap-2 text-sm mt-5">

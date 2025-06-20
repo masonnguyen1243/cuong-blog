@@ -87,7 +87,7 @@ export const accountVerification = async (req, res) => {
       message: "Verification successfully! Please login!",
     });
   } catch (error) {
-    console.log(`Error in accountVerification controller`);
+    console.error(`Error in accountVerification controller`);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -143,7 +143,7 @@ export const signin = async (req, res) => {
       data: { rest, accessToken, refreshToken },
     });
   } catch (error) {
-    console.log(`Error in login controller`);
+    console.error(`Error in login controller`);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -157,7 +157,59 @@ export const logout = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Logged out successfully!" });
   } catch (error) {
-    console.log(`Error in logout controller`);
+    console.error(`Error in logout controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const googleLogin = async (req, res) => {
+  try {
+    const { email, name, googlePhotoUrl } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (user) {
+      const accessToken = generateAccessToken(user._id, user.role);
+      const refreshToken = generateRefreshToken(user._id, user.role);
+
+      const { password, ...rest } = user._doc;
+
+      return res
+        .status(200)
+        .json({ success: true, data: { rest, accessToken, refreshToken } });
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+
+      const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+      const newUser = new User({
+        username:
+          name.toLowerCase().split(" ").join("") +
+          Math.random().toString(9).slice(-4),
+        email,
+        password: hashedPassword,
+        avatar: googlePhotoUrl,
+      });
+
+      await newUser.save();
+
+      const accessToken = generateAccessToken(user._id, user.role);
+      const refreshToken = generateRefreshToken(user._id, user.role);
+      const { password, ...rest } = newUser._doc;
+
+      return res.status(200).json({
+        success: true,
+        message: "Logged in successfully",
+        data: {
+          rest,
+          accessToken,
+          refreshToken,
+        },
+      });
+    }
+  } catch (error) {
+    console.error(`Error in googleLogin controller`);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
