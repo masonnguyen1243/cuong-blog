@@ -147,3 +147,17 @@ export const signin = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Logged out successfully!" });
+  } catch (error) {
+    console.log(`Error in logout controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
