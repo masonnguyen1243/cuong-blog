@@ -27,11 +27,17 @@ export const SignInWithGoogle = createAsyncThunk(
       data
     );
 
-    console.log(response.data);
-
     return response.data;
   }
 );
+
+export const LogoutUser = createAsyncThunk("auth/LogoutUser", async () => {
+  const response = await authorizeAxiosInstance.delete(
+    `${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`
+  );
+
+  return response.data;
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -56,6 +62,11 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.user = action.payload;
+      })
+      .addCase(LogoutUser.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+        state.user = null;
       });
   },
 });

@@ -190,6 +190,8 @@ export const googleLogin = async (req, res) => {
         email,
         password: hashedPassword,
         avatar: googlePhotoUrl,
+        isActive: true,
+        verifyToken: null,
       });
 
       await newUser.save();
