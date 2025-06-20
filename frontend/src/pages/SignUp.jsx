@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
   EMAIL_RULE,
@@ -8,8 +8,17 @@ import {
   PASSWORD_RULE_MESSAGE,
 } from "~/utils/validatos";
 import FieldErrorAlert from "~/components/Form/FieldErrorAlert";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { SignUpUser } from "~/store/slice/authSlice";
+import { useState } from "react";
 
 const SignUp = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isShowPassword, setIsShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -20,8 +29,19 @@ const SignUp = () => {
   const handleSignup = (data) => {
     const { email, username, password } = data;
 
-    console.log({ email, username, password });
-    reset();
+    toast
+      .promise(dispatch(SignUpUser({ email, username, password })), {
+        pending: "Loading",
+      })
+      .then((res) => {
+        if (!res.error) {
+          navigate("/sign-in");
+          reset();
+          toast.success(
+            "Sign up successfully! Please check your email to verify!"
+          );
+        }
+      });
   };
 
   return (
@@ -79,10 +99,10 @@ const SignUp = () => {
               <FieldErrorAlert errors={errors} fieldName={"email"} />
             </div>
 
-            <div className="">
+            <div className="relative">
               <label htmlFor="password">Password</label>
               <input
-                type="password"
+                type={isShowPassword ? "text" : "password"}
                 placeholder="Your password"
                 id="password"
                 {...register("password", {
@@ -94,6 +114,12 @@ const SignUp = () => {
                 })}
                 className="px-4 py-2 border border-gray-400 rounded-lg mt-1 bg-gray-50 w-full"
               />
+              <div
+                onClick={() => setIsShowPassword(!isShowPassword)}
+                className="absolute right-4 cursor-pointer select-none top-[50%] translate-y-[50%]"
+              >
+                {isShowPassword ? <FaEye /> : <FaEyeSlash />}
+              </div>
               <FieldErrorAlert errors={errors} fieldName={"password"} />
             </div>
 
