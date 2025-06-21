@@ -125,6 +125,14 @@ const SignIn = () => {
               </Link>
             </span>
           </div>
+
+          <div className="flex gap-2 text-sm mt-3 justify-center">
+            <span>
+              <Link to={"/"} className="text-blue-500 hover:underline">
+                &#60; Go home
+              </Link>
+            </span>
+          </div>
         </div>
       </div>
     </div>

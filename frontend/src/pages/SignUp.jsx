@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { SignUpUser } from "~/store/slice/authSlice";
 import { useState } from "react";
+import OAuth from "~/components/auth/OAuth";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -129,6 +130,7 @@ const SignUp = () => {
             >
               Sign Up
             </button>
+            <OAuth />
           </form>
 
           <div className="flex gap-2 text-sm mt-5">
@@ -136,6 +138,14 @@ const SignUp = () => {
               Already have an account?{" "}
               <Link to={"/sign-in"} className="text-blue-500 hover:underline">
                 Login
+              </Link>
+            </span>
+          </div>
+
+          <div className="flex gap-2 text-sm mt-3 justify-center">
+            <span>
+              <Link to={"/"} className="text-blue-500 hover:underline">
+                &#60; Go home
               </Link>
             </span>
           </div>
