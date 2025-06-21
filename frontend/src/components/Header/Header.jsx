@@ -97,7 +97,7 @@ const Header = () => {
                     {user.data.rest.email}
                   </span>
                 </DropdownHeader>
-                <Link to={"/dashboard?tab=profile"}>
+                <Link to={"/dashboard/profile"}>
                   <DropdownItem>Profile</DropdownItem>
                   <DropdownDivider />
                   <DropdownItem onClick={handleLogout}>Sign out</DropdownItem>

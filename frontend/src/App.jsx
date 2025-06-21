@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// Public routes
 import Home from "~/pages/Home";
 import About from "~/pages/About";
 import SignIn from "~/pages/SignIn";
@@ -6,7 +8,11 @@ import SignUp from "~/pages/SignUp";
 import Dashboard from "~/pages/Dashboard";
 import Project from "~/pages/Project";
 import PublicLayout from "~/components/Layout/PublicLayout";
+
+// Private routes
 import PrivateLayout from "~/components/Layout/PrivateRoute";
+
+// Others
 import NotFound from "~/pages/404Page";
 
 const App = () => {
@@ -22,8 +28,8 @@ const App = () => {
           </Route>
 
           {/* Private Routes */}
-          <Route path="/admin" element={<PrivateLayout />}>
-            <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<PrivateLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
           </Route>
 
           {/* Others */}
