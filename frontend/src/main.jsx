@@ -10,11 +10,15 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 const persistor = persistStore(store);
 
+import { ThemeProvider } from "~/components/theme/ThemeProvider";
+
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
-      <ToastContainer position="bottom-right" />
-      <App />
+      <ThemeProvider>
+        <ToastContainer position="bottom-right" />
+        <App />
+      </ThemeProvider>
     </PersistGate>
   </Provider>
 );

@@ -13,11 +13,11 @@ import {
 } from "flowbite-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon, FaUser } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { LogoutUser } from "~/store/slice/authSlice";
 import { toast } from "react-toastify";
+import { toggleTheme } from "~/store/theme/themeSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -25,6 +25,7 @@ const Header = () => {
 
   const path = useLocation().pathname;
   const { user, loading, error } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.theme);
 
   const handleLogout = () => {
     toast
@@ -64,13 +65,14 @@ const Header = () => {
           <AiOutlineSearch />
         </Button>
 
-        <div className="flex gap-4 md:order-2 items-center">
+        <div className="flex items-center gap-4 md:order-2">
           <Button
             className="w-12 h-10 hidden sm:inline cursor-pointer"
             color={"gray"}
             pill
+            onClick={() => dispatch(toggleTheme())}
           >
-            <FaMoon />
+            {theme === "light" ? <FaSun /> : <FaMoon />}
           </Button>
 
           <div className="relative">
