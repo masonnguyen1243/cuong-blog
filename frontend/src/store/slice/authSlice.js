@@ -39,6 +39,17 @@ export const LogoutUser = createAsyncThunk("auth/LogoutUser", async () => {
   return response.data;
 });
 
+export const GetCurrentUser = createAsyncThunk(
+  "auth/GetCurrentUser",
+  async () => {
+    const response = await authorizeAxiosInstance.get(
+      `${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`
+    );
+
+    return response.data;
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -67,6 +78,11 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.user = null;
+      })
+      .addCase(GetCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = action.payload;
       });
   },
 });

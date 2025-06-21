@@ -2,6 +2,7 @@ import express from "express";
 import {
   accountVerification,
   changeAvatar,
+  getCurrentUser,
   googleLogin,
   logout,
   signin,
@@ -11,6 +12,8 @@ import { multerUploadMiddleware } from "../middlewares/multerUploadMiddleware.js
 import { verifyToken } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
+
+router.get("/profile", verifyToken, getCurrentUser);
 
 router.post("/signup", signup);
 

@@ -268,3 +268,17 @@ export const changeAvatar = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const getCurrentUser = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const currentUser = await User.findOne({ _id: userId });
+
+    const { password, ...rest } = currentUser._doc;
+
+    return res.status(200).json({ success: true, data: rest });
+  } catch (error) {
+    console.error(`Error in getCurrentUser controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};

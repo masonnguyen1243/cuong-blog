@@ -1,14 +1,14 @@
 import { Button, TextInput } from "flowbite-react";
-import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import authorizeAxiosInstance from "~/utils/authorizeAxios";
+import { GetCurrentUser } from "~/store/slice/authSlice";
 
 const DashboardProfile = () => {
+  const dispatch = useDispatch();
+
   const { user } = useSelector((state) => state.auth);
   const filePickerRef = useRef();
-  const [blogData, setBlogData] = useState({
-    avatar: [],
-  });
 
   const handleChangeImage = async (e) => {
     const file = e.target.files[0];
@@ -16,7 +16,7 @@ const DashboardProfile = () => {
     formData.append("avatar", file);
 
     try {
-      const { data } = await authorizeAxiosInstance.post(
+      await authorizeAxiosInstance.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/change-avatar`,
         formData,
         {
@@ -24,10 +24,7 @@ const DashboardProfile = () => {
         }
       );
 
-      setBlogData((prev) => ({
-        ...prev,
-        avatar: [...prev.avatar, data.data.avatar],
-      }));
+      dispatch(GetCurrentUser());
     } catch (error) {
       console.error(error);
     }
@@ -49,7 +46,7 @@ const DashboardProfile = () => {
           className="w-32 h-32 cursor-pointer shadow-md overflow-hidden rounded-full self-center"
         >
           <img
-            src={blogData.avatar}
+            src={user?.data?.avatar}
             alt="avatar"
             className="rounded-full w-full h-full object-cover border-8 border-[lightgray]"
           />
@@ -59,13 +56,13 @@ const DashboardProfile = () => {
           type="text"
           id="username"
           placeholder="username"
-          defaultValue={user?.data?.rest?.username}
+          defaultValue={user?.data?.username}
         />
         <TextInput
           type="email"
           id="email"
           placeholder="email"
-          defaultValue={user?.data?.rest?.email}
+          defaultValue={user?.data?.email}
         />
         <TextInput type="password" id="password" placeholder="password" />
         <Button
