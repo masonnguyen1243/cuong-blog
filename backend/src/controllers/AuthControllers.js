@@ -7,6 +7,7 @@ import {
   generateRefreshToken,
 } from "../utils/GenerateToken.js";
 import ms from "ms";
+import { CloudinaryProvider } from "../utils/Cloudinary.js";
 
 export const signup = async (req, res) => {
   try {
@@ -233,6 +234,37 @@ export const googleLogin = async (req, res) => {
     }
   } catch (error) {
     console.error(`Error in googleLogin controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const changeAvatar = async (req, res) => {
+  try {
+    const image = req.file;
+    const userId = req.user.userId;
+
+    const user = await User.findOne({ _id: userId });
+
+    const uploadResult = await CloudinaryProvider.streamUpload(
+      image?.buffer,
+      "avatar"
+    );
+
+    const updatedUser = await User.findOneAndUpdate(
+      user._id,
+      { avatar: uploadResult.secure_url },
+      { new: true }
+    );
+
+    const { password, ...rest } = updatedUser._doc;
+
+    return res.status(200).json({
+      success: true,
+      message: "Change avatar successfully!",
+      data: rest,
+    });
+  } catch (error) {
+    console.error(`Error in changeAvatar controller`);
     return res.status(500).json({ success: false, message: error.message });
   }
 };

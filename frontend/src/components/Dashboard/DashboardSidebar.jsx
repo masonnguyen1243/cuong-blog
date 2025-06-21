@@ -42,17 +42,16 @@ const DashboardSidebar = () => {
     <Sidebar className="w-full md:w-56">
       <SidebarItems>
         <SidebarItemGroup className="flex flex-col gap-1">
-          <Link to={"/dashboard?tab=profile"}>
-            <SidebarItem
-              active={tab === "profile"}
-              icon={HiUser}
-              label={"User"}
-              labelColor="dark"
-              className="cursor-pointer"
-            >
-              Profile
-            </SidebarItem>
-          </Link>
+          <SidebarItem
+            active={tab === "profile"}
+            icon={HiUser}
+            label={"User"}
+            labelColor="dark"
+            className="cursor-pointer"
+            as={"div"}
+          >
+            <Link to={"/dashboard?tab=profile"}>Profile</Link>
+          </SidebarItem>
           <SidebarItem
             onClick={handleLogout}
             icon={HiArrowSmRight}
