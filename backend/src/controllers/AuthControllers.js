@@ -172,6 +172,16 @@ export const googleLogin = async (req, res) => {
       const accessToken = generateAccessToken(user._id, user.role);
       const refreshToken = generateRefreshToken(user._id, user.role);
 
+      const cookieOptions = {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: ms("7 days"),
+      };
+
+      res.cookie("accessToken", accessToken, cookieOptions);
+      res.cookie("refreshToken", refreshToken, cookieOptions);
+
       const { password, ...rest } = user._doc;
 
       return res
@@ -198,6 +208,17 @@ export const googleLogin = async (req, res) => {
 
       const accessToken = generateAccessToken(user._id, user.role);
       const refreshToken = generateRefreshToken(user._id, user.role);
+
+      const cookieOptions = {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: ms("7 days"),
+      };
+
+      res.cookie("accessToken", accessToken, cookieOptions);
+      res.cookie("refreshToken", refreshToken, cookieOptions);
+
       const { password, ...rest } = newUser._doc;
 
       return res.status(200).json({
