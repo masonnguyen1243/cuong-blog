@@ -1,5 +1,10 @@
 import {
+  Avatar,
   Button,
+  Dropdown,
+  DropdownDivider,
+  DropdownHeader,
+  DropdownItem,
   Navbar,
   NavbarCollapse,
   NavbarLink,
@@ -8,9 +13,8 @@ import {
 } from "flowbite-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
+import { FaMoon, FaUser } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { LogoutUser } from "~/store/slice/authSlice";
 import { toast } from "react-toastify";
@@ -20,7 +24,6 @@ const Header = () => {
   const navigate = useNavigate();
 
   const path = useLocation().pathname;
-  const [isOpenModel, setIsOpenModel] = useState(false);
   const { user, loading, error } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
@@ -72,29 +75,38 @@ const Header = () => {
 
           <div className="relative">
             {user ? (
-              <p
-                onClick={() => setIsOpenModel(!isOpenModel)}
-                className="text-white select-none cursor-pointer hover:underline underline-offset-4"
+              <Dropdown
+                arrowIcon={false}
+                inline
+                label={
+                  <Avatar
+                    alt="user"
+                    img={user?.data?.rest?.avatar}
+                    rounded
+                    className="cursor-pointer"
+                  />
+                }
               >
-                {user.data.rest.username}
-              </p>
+                <DropdownHeader className="flex items-center gap-2 justify-center flex-col">
+                  <span className="black text-sm select-none">
+                    @{user.data.rest.username}
+                  </span>
+                  <span className="black text-sm font-medium truncate select-none">
+                    {user.data.rest.email}
+                  </span>
+                </DropdownHeader>
+                <Link to={"/dashboard?tab=profile"}>
+                  <DropdownItem>Profile</DropdownItem>
+                  <DropdownDivider />
+                  <DropdownItem onClick={handleLogout}>Sign out</DropdownItem>
+                </Link>
+              </Dropdown>
             ) : (
               <Link to={"/sign-in"}>
                 <Button className="cursor-pointer" outline>
                   Sign in
                 </Button>
               </Link>
-            )}
-
-            {isOpenModel && (
-              <div className="bg-white w-30 right-0 mt-3 absolute shadow-md p-2">
-                <button
-                  onClick={handleLogout}
-                  className="p-2 rounded-md cursor-pointer bg-red-500 text-white w-full hover:opacity-90"
-                >
-                  Logout
-                </button>
-              </div>
             )}
           </div>
 
