@@ -5,6 +5,7 @@ import authorizeAxiosInstance from "~/utils/authorizeAxios";
 import { GetCurrentUser } from "~/store/slice/authSlice";
 import { toast } from "react-toastify";
 import { UpdateUser } from "~/store/slice/authSlice";
+import { Link } from "react-router-dom";
 
 const DashboardProfile = () => {
   const dispatch = useDispatch();
@@ -113,6 +114,16 @@ const DashboardProfile = () => {
         >
           Update
         </Button>
+        {user.data.role === "admin" && (
+          <Link to={"/admin/create-post"}>
+            <Button
+              type="button"
+              className="w-full bg-gradient-to-r from-purple-400 to-pink-400 cursor-pointer"
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
       </form>
     </div>
   );

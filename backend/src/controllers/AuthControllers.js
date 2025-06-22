@@ -288,7 +288,6 @@ export const updateUser = async (req, res) => {
     const { id } = req.params;
     const userId = req.user.userId;
     const { password, username } = req.body;
-    console.log(password, username);
 
     const user = await User.findById(id);
 

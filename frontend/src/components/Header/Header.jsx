@@ -83,7 +83,7 @@ const Header = () => {
                 label={
                   <Avatar
                     alt="user"
-                    img={user?.data?.rest?.avatar}
+                    img={user?.data?.rest?.avatar || user?.data?.avatar}
                     rounded
                     className="cursor-pointer"
                   />
@@ -91,10 +91,10 @@ const Header = () => {
               >
                 <DropdownHeader className="flex items-center gap-2 justify-center flex-col">
                   <span className="black text-sm select-none">
-                    @{user?.data?.rest?.username}
+                    @{user?.data?.rest?.username || user?.data?.username}
                   </span>
                   <span className="black text-sm font-medium truncate select-none">
-                    {user?.data?.rest?.email}
+                    {user?.data?.rest?.email || user?.data?.email}
                   </span>
                 </DropdownHeader>
                 <Link to={"/dashboard?tab=profile"}>

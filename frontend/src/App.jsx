@@ -12,6 +12,10 @@ import PublicLayout from "~/components/Layout/PublicLayout";
 // Private routes
 import PrivateLayout from "~/components/Layout/PrivateRoute";
 
+//Admin routes
+import AdminLayout from "~/components/Layout/AdminLayout";
+import CreatePost from "~/components/Post/CreatePost";
+
 // Others
 import NotFound from "~/pages/404Page";
 
@@ -30,6 +34,11 @@ const App = () => {
           {/* Private Routes */}
           <Route path="/dashboard" element={<PrivateLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="/admin/create-post" element={<CreatePost />} />
           </Route>
 
           {/* Others */}
