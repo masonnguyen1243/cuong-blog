@@ -333,3 +333,24 @@ export const updateUser = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (user) {
+      await user.deleteOne();
+      return res
+        .status(200)
+        .json({ success: true, message: "Deleted successfully" });
+    } else {
+      return res
+        .status(200)
+        .json({ success: false, message: "Deleted failed" });
+    }
+  } catch (error) {
+    console.error(`Error in deleteUser controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};

@@ -2,6 +2,7 @@ import express from "express";
 import {
   accountVerification,
   changeAvatar,
+  deleteUser,
   getCurrentUser,
   googleLogin,
   logout,
@@ -27,6 +28,8 @@ router.delete("/logout", logout);
 router.post("/google", googleLogin);
 
 router.put("/update/:id", verifyToken, updateUser);
+
+router.delete("/delete/:id", verifyToken, deleteUser);
 
 router.post(
   "/change-avatar",
