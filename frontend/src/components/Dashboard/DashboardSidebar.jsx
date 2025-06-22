@@ -7,7 +7,7 @@ import {
 import { HiArrowSmRight, HiUser } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LogoutUser } from "~/store/slice/authSlice";
 import { toast } from "react-toastify";
 
@@ -16,6 +16,8 @@ const DashboardSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [tab, setTab] = useState("");
+
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -45,7 +47,7 @@ const DashboardSidebar = () => {
           <SidebarItem
             active={tab === "profile"}
             icon={HiUser}
-            label={"User"}
+            label={`${user?.data?.role === "user" ? "User" : "Admin"}`}
             labelColor="dark"
             className="cursor-pointer"
             as={"div"}
