@@ -16,7 +16,7 @@ const CreatePost = () => {
             className="flex-1"
           />
           <Select>
-            <option value={"uncategories"}>Select a category</option>
+            <option value={"uncategorized"}>Select a category</option>
             <option value={"javascript"}>JavaScript</option>
             <option value={"reactjs"}>ReactJS</option>
             <option value={"reactjs"}>NextJS</option>
@@ -34,11 +34,6 @@ const CreatePost = () => {
             Upload image
           </Button>
         </div>
-        {/* <textarea
-          rows={6}
-          placeholder="Write something..."
-          className="bg-white text-black p-2 outline-none rounded-xs"
-        ></textarea> */}
         <ReactQuill
           theme="snow"
           placeholder="Write something..."
