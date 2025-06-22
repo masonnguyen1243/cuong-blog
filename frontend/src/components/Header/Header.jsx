@@ -91,10 +91,10 @@ const Header = () => {
               >
                 <DropdownHeader className="flex items-center gap-2 justify-center flex-col">
                   <span className="black text-sm select-none">
-                    @{user.data.rest.username}
+                    @{user?.data?.rest?.username}
                   </span>
                   <span className="black text-sm font-medium truncate select-none">
-                    {user.data.rest.email}
+                    {user?.data?.rest?.email}
                   </span>
                 </DropdownHeader>
                 <Link to={"/dashboard?tab=profile"}>

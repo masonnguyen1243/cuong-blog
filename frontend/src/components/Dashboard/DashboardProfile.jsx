@@ -1,5 +1,5 @@
 import { Button, TextInput } from "flowbite-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import authorizeAxiosInstance from "~/utils/authorizeAxios";
 import { GetCurrentUser } from "~/store/slice/authSlice";
@@ -9,6 +9,10 @@ const DashboardProfile = () => {
 
   const { user } = useSelector((state) => state.auth);
   const filePickerRef = useRef();
+
+  useEffect(() => {
+    dispatch(GetCurrentUser());
+  }, [dispatch]);
 
   const handleChangeImage = async (e) => {
     const file = e.target.files[0];
@@ -53,16 +57,17 @@ const DashboardProfile = () => {
         </div>
 
         <TextInput
-          type="text"
-          id="username"
-          placeholder="username"
-          defaultValue={user?.data?.username}
-        />
-        <TextInput
+          disabled
           type="email"
           id="email"
           placeholder="email"
           defaultValue={user?.data?.email}
+        />
+        <TextInput
+          type="text"
+          id="username"
+          placeholder="username"
+          defaultValue={user?.data?.username}
         />
         <TextInput type="password" id="password" placeholder="password" />
         <Button

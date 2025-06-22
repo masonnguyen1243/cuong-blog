@@ -7,6 +7,7 @@ import {
   logout,
   signin,
   signup,
+  updateUser,
 } from "../controllers/AuthControllers.js";
 import { multerUploadMiddleware } from "../middlewares/multerUploadMiddleware.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
@@ -24,6 +25,8 @@ router.post("/sign-in", signin);
 router.delete("/logout", logout);
 
 router.post("/google", googleLogin);
+
+router.put("/update/:id", verifyToken, updateUser);
 
 router.post(
   "/change-avatar",
