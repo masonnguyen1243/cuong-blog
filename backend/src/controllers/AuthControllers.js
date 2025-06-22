@@ -290,7 +290,7 @@ export const updateUser = async (req, res) => {
     const { password, username } = req.body;
     console.log(password, username);
 
-    const user = await User.findOne({ _id: id });
+    const user = await User.findById(id);
 
     if (!user) {
       return res
@@ -321,12 +321,12 @@ export const updateUser = async (req, res) => {
       user.password = hashedPassword;
     }
 
-    await user.save();
+    const updatedUser = await user.save();
 
     return res.status(200).json({
-      success: false,
+      success: true,
       message: "Updated successfully!",
-      data: user,
+      data: updatedUser,
     });
   } catch (error) {
     console.error(`Error in updateUser controller`);

@@ -50,10 +50,24 @@ export const GetCurrentUser = createAsyncThunk(
   }
 );
 
+export const UpdateUser = createAsyncThunk(
+  "auth/UpdateUser",
+  async ({ id, formInput }) => {
+    console.log("id", id);
+
+    const response = await authorizeAxiosInstance.put(
+      `${import.meta.env.VITE_BACKEND_URL}/api/auth/update/${id}`,
+      formInput
+    );
+
+    return response.data;
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: null,
+    user: [],
     loading: false,
     error: null,
   },
@@ -83,6 +97,19 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.user = action.payload;
+      })
+      .addCase(UpdateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = action.payload;
+        const updatedUser = action.payload;
+
+        const userIndex = state.user.findIndex(
+          (user) => user._id === updatedUser._id
+        );
+        if (userIndex !== -1) {
+          state.user[userIndex] = updatedUser;
+        }
       });
   },
 });
