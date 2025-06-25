@@ -1,8 +1,10 @@
 import Post from "../models/PostModel.js";
+import { CloudinaryProvider } from "../utils/Cloudinary.js";
 
 export const createPost = async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, category } = req.body;
+    const image = req.file;
 
     if (!title || !content) {
       return res.status(404).json({
@@ -10,6 +12,11 @@ export const createPost = async (req, res) => {
         message: "Please provide all required fields",
       });
     }
+
+    const uploadResult = await CloudinaryProvider.streamUpload(
+      image?.buffer,
+      "image"
+    );
 
     const slug = title
       .split(" ")
@@ -21,11 +28,12 @@ export const createPost = async (req, res) => {
       ...req.body,
       slug,
       userId: req.user.userId,
+      image: uploadResult.secure_url,
     });
 
     const savedPost = await newPost.save();
 
-    return res.status(200).json({ success: false, data: savedPost });
+    return res.status(200).json({ success: true, data: savedPost });
   } catch (error) {
     console.error(`Error in create createPost controller`);
     return res.status(500).json({ success: false, message: error.message });
