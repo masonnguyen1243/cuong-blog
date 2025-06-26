@@ -18,6 +18,34 @@ export const createPost = createAsyncThunk(
   }
 );
 
+export const getPosts = createAsyncThunk(
+  "post/getPosts",
+  async ({
+    userId,
+    startIndex,
+    limit,
+    sortDirection,
+    searchTerm,
+    category,
+  }) => {
+    const query = new URLSearchParams();
+    if (userId) query.append("userId", userId);
+    if (startIndex) query.append("startIndex", startIndex);
+    if (limit) query.append("limit", limit);
+    if (sortDirection) query.append("sortDirection", sortDirection);
+    if (category) query.append("category", category);
+    if (searchTerm) query.append("searchTerm", searchTerm);
+
+    const response = await authorizeAxiosInstance.get(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/api/posts/getposts?${query.toString()}`
+    );
+
+    return response.data;
+  }
+);
+
 const postSlice = createSlice({
   name: "post",
   initialState: {
@@ -25,9 +53,13 @@ const postSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(createPost.fulfilled, (state, action) => {
-      state.post = action.payload;
-    });
+    builder
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.post = action.payload;
+      })
+      .addCase(getPosts.fulfilled, (state, action) => {
+        state.post = action.payload;
+      });
   },
 });
 
