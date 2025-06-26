@@ -4,7 +4,7 @@ import {
   SidebarItemGroup,
   SidebarItems,
 } from "flowbite-react";
-import { HiArrowSmRight, HiUser } from "react-icons/hi";
+import { HiArrowSmRight, HiDocumentText, HiUser } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -44,16 +44,31 @@ const DashboardSidebar = () => {
     <Sidebar className="w-full md:w-56">
       <SidebarItems>
         <SidebarItemGroup className="flex flex-col gap-1">
-          <SidebarItem
-            active={tab === "profile"}
-            icon={HiUser}
-            label={`${user?.data?.role === "user" ? "User" : "Admin"}`}
-            labelColor="dark"
-            className="cursor-pointer"
-            as={"div"}
-          >
-            <Link to={"/dashboard?tab=profile"}>Profile</Link>
-          </SidebarItem>
+          <Link to={"/dashboard?tab=profile"}>
+            <SidebarItem
+              active={tab === "profile"}
+              icon={HiUser}
+              label={`${user?.data?.role === "user" ? "User" : "Admin"}`}
+              labelColor="dark"
+              className="cursor-pointer"
+              as={"div"}
+            >
+              Profile
+            </SidebarItem>
+          </Link>
+          {user?.data?.role === "admin" && (
+            <Link to={"/dashboard?tab=posts"}>
+              <SidebarItem
+                active={tab === "posts"}
+                icon={HiDocumentText}
+                labelColor="dark"
+                className="cursor-pointer"
+                as={"div"}
+              >
+                Posts
+              </SidebarItem>
+            </Link>
+          )}
           <SidebarItem
             onClick={handleLogout}
             icon={HiArrowSmRight}
