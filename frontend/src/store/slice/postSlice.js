@@ -46,6 +46,14 @@ export const getPosts = createAsyncThunk(
   }
 );
 
+export const deletePost = createAsyncThunk("post/deletePost", async (id) => {
+  await authorizeAxiosInstance.delete(
+    `${import.meta.env.VITE_BACKEND_URL}/api/posts/deletepost/${id}`
+  );
+
+  return id;
+});
+
 const postSlice = createSlice({
   name: "post",
   initialState: {
@@ -59,6 +67,9 @@ const postSlice = createSlice({
       })
       .addCase(getPosts.fulfilled, (state, action) => {
         state.post = action.payload;
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.post = state.post.filter((p) => p._id !== action.payload);
       });
   },
 });

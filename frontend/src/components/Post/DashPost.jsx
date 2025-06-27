@@ -9,7 +9,8 @@ import {
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getPosts } from "~/store/slice/postSlice";
+import { toast } from "react-toastify";
+import { getPosts, deletePost } from "~/store/slice/postSlice";
 
 const DashPost = () => {
   const dispatch = useDispatch();
@@ -17,11 +18,23 @@ const DashPost = () => {
   const { user } = useSelector((state) => state.auth);
   const userId = user.data._id;
 
-  console.log("🚀 ~ DashPost ~ user:", user);
-  console.log("🚀 ~ DashPost ~ post:", post);
   useEffect(() => {
     dispatch(getPosts({ userId }));
   }, [dispatch, userId]);
+
+  const handleDeletePost = (id) => {
+    if (window.confirm("Are you sure you want to delete this post")) {
+      toast
+        .promise(dispatch(deletePost(id)), { pending: "Loading" })
+        .then((res) => {
+          if (!res.error) {
+            toast.success("Deleted successfully");
+            dispatch(getPosts({ userId }));
+          }
+        });
+    }
+  };
+
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 ">
       {user?.data?.role === "admin" && post?.data?.posts?.length > 0 ? (
@@ -70,7 +83,10 @@ const DashPost = () => {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <span className="font-medium text-red-500 hover:underline cursor-pointer">
+                    <span
+                      onClick={() => handleDeletePost(post._id)}
+                      className="font-medium text-red-500 hover:underline cursor-pointer"
+                    >
                       Delete
                     </span>
                   </TableCell>

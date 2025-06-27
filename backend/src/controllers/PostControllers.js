@@ -1,4 +1,5 @@
 import Post from "../models/PostModel.js";
+import User from "../models/UserModel.js";
 import { CloudinaryProvider } from "../utils/Cloudinary.js";
 
 export const createPost = async (req, res) => {
@@ -82,6 +83,24 @@ export const getPosts = async (req, res) => {
       .json({ success: true, data: { posts, totalPosts, lastMonthPosts } });
   } catch (error) {
     console.error(`Error in create getPosts controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const deletePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const post = await Post.findById(id);
+    if (post) {
+      await post.deleteOne();
+      return res
+        .status(200)
+        .json({ success: true, message: "Deleted successfully" });
+    } else {
+      return res.status(400).json({ success: false, message: "Delete failed" });
+    }
+  } catch (error) {
+    console.error(`Error in create deletePost controller`);
     return res.status(500).json({ success: false, message: error.message });
   }
 };

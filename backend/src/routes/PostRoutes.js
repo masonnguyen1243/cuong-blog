@@ -1,6 +1,10 @@
 import express from "express";
-import { verifyToken } from "../middlewares/authMiddleware.js";
-import { createPost, getPosts } from "../controllers/PostControllers.js";
+import { isAdmin, verifyToken } from "../middlewares/authMiddleware.js";
+import {
+  createPost,
+  deletePost,
+  getPosts,
+} from "../controllers/PostControllers.js";
 import { multerUploadMiddleware } from "../middlewares/multerUploadMiddleware.js";
 
 const router = express.Router();
@@ -13,5 +17,7 @@ router.post(
 );
 
 router.get("/getposts", getPosts);
+
+router.delete("/deletepost/:id", verifyToken, isAdmin, deletePost);
 
 export default router;
