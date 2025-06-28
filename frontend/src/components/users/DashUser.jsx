@@ -7,30 +7,32 @@ import {
   TableRow,
 } from "flowbite-react";
 import { useEffect } from "react";
+import { FaCheck } from "react-icons/fa";
+import { GrClose } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
-// import { toast } from "react-toastify";
-import { getUsers } from "~/store/slice/authSlice";
+import { toast } from "react-toastify";
+import { getUsers, deleteUser } from "~/store/slice/authSlice";
 
 const DashUser = () => {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.auth);
 
+  const handleDeleteUser = (id) => {
+    if (window.confirm("Are you sure you want to delete this user")) {
+      toast
+        .promise(dispatch(deleteUser(id)), { pending: "Loading" })
+        .then((res) => {
+          if (!res.error) {
+            toast.success("Deleted successfully");
+            dispatch(getUsers());
+          }
+        });
+    }
+  };
+
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch]);
-
-  //   const handleDeletePost = (id) => {
-  //     if (window.confirm("Are you sure you want to delete this post")) {
-  //       toast
-  //         .promise(dispatch(deletePost(id)), { pending: "Loading" })
-  //         .then((res) => {
-  //           if (!res.error) {
-  //             toast.success("Deleted successfully");
-  //             dispatch(getPosts({ userId }));
-  //           }
-  //         });
-  //     }
-  //   };
 
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 ">
@@ -42,7 +44,7 @@ const DashUser = () => {
               <TableHeadCell>User image</TableHeadCell>
               <TableHeadCell>Username</TableHeadCell>
               <TableHeadCell>Email</TableHeadCell>
-              <TableHeadCell>Role</TableHeadCell>
+              <TableHeadCell>Admin</TableHeadCell>
               <TableHeadCell>Delete</TableHeadCell>
             </TableHead>
             {users?.data?.users?.map((user, index) => (
@@ -60,10 +62,16 @@ const DashUser = () => {
                   </TableCell>
                   <TableCell>{user.username}</TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.role}</TableCell>
+                  <TableCell>
+                    {user.role === "admin" ? (
+                      <FaCheck color="green" />
+                    ) : (
+                      <GrClose color="red" />
+                    )}
+                  </TableCell>
                   <TableCell>
                     <span
-                      //   onClick={() => handleDeletePost(user._id)}
+                      onClick={() => handleDeleteUser(user._id)}
                       className="font-medium text-red-500 hover:underline cursor-pointer"
                     >
                       Delete
