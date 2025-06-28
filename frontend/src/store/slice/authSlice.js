@@ -64,10 +64,19 @@ export const UpdateUser = createAsyncThunk(
   }
 );
 
+export const getUsers = createAsyncThunk("auth/getUsers", async () => {
+  const response = await authorizeAxiosInstance.get(
+    `${import.meta.env.VITE_BACKEND_URL}/api/auth/getusers`
+  );
+
+  return response.data;
+});
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: [],
+    users: [],
     loading: false,
     error: null,
   },
@@ -110,6 +119,11 @@ const authSlice = createSlice({
         if (userIndex !== -1) {
           state.user[userIndex] = updatedUser;
         }
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.users = action.payload;
       });
   },
 });
