@@ -8,6 +8,7 @@ import SignUp from "~/pages/SignUp";
 import Dashboard from "~/pages/Dashboard";
 import Project from "~/pages/Project";
 import PublicLayout from "~/components/Layout/PublicLayout";
+import PostPage from "~/components/Post/PostPage";
 
 // Private routes
 import PrivateLayout from "~/components/Layout/PrivateRoute";
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<Project />} />
+            <Route path="/post/:postSlug" element={<PostPage />} />
           </Route>
 
           {/* Private Routes */}

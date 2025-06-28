@@ -25,6 +25,7 @@ export const getPosts = createAsyncThunk(
     postId,
     startIndex,
     limit,
+    slug,
     sortDirection,
     searchTerm,
     category,
@@ -37,6 +38,7 @@ export const getPosts = createAsyncThunk(
     if (sortDirection) query.append("sortDirection", sortDirection);
     if (category) query.append("category", category);
     if (searchTerm) query.append("searchTerm", searchTerm);
+    if (slug) query.append("slug", slug);
 
     const response = await authorizeAxiosInstance.get(
       `${
