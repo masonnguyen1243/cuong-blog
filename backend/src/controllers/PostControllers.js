@@ -1,5 +1,4 @@
 import Post from "../models/PostModel.js";
-import User from "../models/UserModel.js";
 import { CloudinaryProvider } from "../utils/Cloudinary.js";
 
 export const createPost = async (req, res) => {
@@ -45,12 +44,12 @@ export const getPosts = async (req, res) => {
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;
-    const sortDirection = req.query.order === "asc" ? 1 : -1;
+    // const sortDirection = req.query.order === "asc" ? 1 : -1;
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.slug && { slug: req.query.slug }),
-      ...(req.query.postsId && { _id: req.query.postsId }),
+      ...(req.query.postId && { _id: req.query.postId }),
       ...(req.query.searchTerm && {
         $or: [
           {
@@ -60,7 +59,7 @@ export const getPosts = async (req, res) => {
         ],
       }),
     })
-      .sort({ updatedAt: sortDirection })
+      .sort({ createdAt: -1 })
       .skip(startIndex)
       .limit(limit);
 
@@ -101,6 +100,45 @@ export const deletePost = async (req, res) => {
     }
   } catch (error) {
     console.error(`Error in create deletePost controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const updatePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content, category } = req.body;
+    const image = req.file;
+    console.log(title, content, category);
+    console.log(image);
+
+    const uploadResult = await CloudinaryProvider.streamUpload(
+      image?.buffer,
+      "image"
+    );
+
+    const post = await Post.findById(id);
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          title: title || post.title,
+          content: content || post.content,
+          category: category || post.category,
+          image: uploadResult.secure_url || post.image,
+        },
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Updated successfully",
+      data: updatedPost,
+    });
+  } catch (error) {
+    console.error(`Error in create updatePost controller`);
     return res.status(500).json({ success: false, message: error.message });
   }
 };

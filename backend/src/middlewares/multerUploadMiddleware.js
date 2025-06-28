@@ -19,6 +19,7 @@ const customFileFilter = (req, file, callback) => {
 
 //Khởi tạo function upload được bọc bởi multer
 const upload = multer({
+  storage: multer.memoryStorage(),
   limits: { fileSize: LIMIT_COMMON_FILE_SIZE },
   fileFilter: customFileFilter,
 });

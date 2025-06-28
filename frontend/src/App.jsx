@@ -15,6 +15,7 @@ import PrivateLayout from "~/components/Layout/PrivateRoute";
 //Admin routes
 import AdminLayout from "~/components/Layout/AdminLayout";
 import CreatePost from "~/components/Post/CreatePost";
+import UpdatePost from "~/components/Post/UpdatePost";
 
 // Others
 import NotFound from "~/pages/404Page";
@@ -39,6 +40,7 @@ const App = () => {
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="/admin/create-post" element={<CreatePost />} />
+            <Route path="/admin/update-post/:postId" element={<UpdatePost />} />
           </Route>
 
           {/* Others */}

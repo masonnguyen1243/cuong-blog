@@ -4,6 +4,7 @@ import {
   createPost,
   deletePost,
   getPosts,
+  updatePost,
 } from "../controllers/PostControllers.js";
 import { multerUploadMiddleware } from "../middlewares/multerUploadMiddleware.js";
 
@@ -19,5 +20,13 @@ router.post(
 router.get("/getposts", getPosts);
 
 router.delete("/deletepost/:id", verifyToken, isAdmin, deletePost);
+
+router.put(
+  "/updatepost/:id",
+  verifyToken,
+  isAdmin,
+  multerUploadMiddleware.upload.single("image"),
+  updatePost
+);
 
 export default router;

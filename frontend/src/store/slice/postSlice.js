@@ -22,6 +22,7 @@ export const getPosts = createAsyncThunk(
   "post/getPosts",
   async ({
     userId,
+    postId,
     startIndex,
     limit,
     sortDirection,
@@ -30,6 +31,7 @@ export const getPosts = createAsyncThunk(
   }) => {
     const query = new URLSearchParams();
     if (userId) query.append("userId", userId);
+    if (postId) query.append("postId", postId);
     if (startIndex) query.append("startIndex", startIndex);
     if (limit) query.append("limit", limit);
     if (sortDirection) query.append("sortDirection", sortDirection);
@@ -54,6 +56,22 @@ export const deletePost = createAsyncThunk("post/deletePost", async (id) => {
   return id;
 });
 
+export const updatePost = createAsyncThunk(
+  "post/updatePost",
+  async (postId, formData) => {
+    const response = await authorizeAxiosInstance.put(
+      `${import.meta.env.VITE_BACKEND_URL}/api/posts/updatepost/${postId}`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      }
+    );
+
+    return response.data;
+  }
+);
+
 const postSlice = createSlice({
   name: "post",
   initialState: {
@@ -70,6 +88,14 @@ const postSlice = createSlice({
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.post = state.post.filter((p) => p._id !== action.payload);
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        console.log(action.payload);
+
+        const index = state.post.findIndex((p) => p._id === action.payload.id);
+        if (index !== -1) {
+          state.post[index] = action.payload;
+        }
       });
   },
 });
