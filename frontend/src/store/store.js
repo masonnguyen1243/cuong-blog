@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slice/authSlice";
 import themeReducer from "./theme/themeSlice";
 import postReducer from "./slice/postSlice";
+import commentReducer from "./slice/commentSlice";
 
 //Config redux-persist
 import { combineReducers } from "redux";
@@ -20,6 +21,7 @@ const reducers = combineReducers({
   auth: authReducer,
   theme: themeReducer,
   post: postReducer,
+  comment: commentReducer,
 });
 
 // Thực hiện persist Reducer

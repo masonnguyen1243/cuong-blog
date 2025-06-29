@@ -1,9 +1,12 @@
 import { Button, Textarea } from "flowbite-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { createComment } from "~/store/slice/commentSlice";
 
 const CommentSection = ({ postId }) => {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [comment, setComment] = useState("");
 
@@ -11,6 +14,30 @@ const CommentSection = ({ postId }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (comment.length > 200) {
+      return;
+    }
+
+    toast
+      .promise(
+        dispatch(
+          createComment({
+            userId: user.data._id,
+            postId: postId,
+            content: comment,
+          })
+        ),
+        {
+          pending: "Loading...",
+        }
+      )
+      .then((res) => {
+        if (!res.error) {
+          toast.success(res.payload.message);
+          setComment("");
+        }
+      });
   };
 
   return (
