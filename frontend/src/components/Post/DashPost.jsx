@@ -15,12 +15,14 @@ import { getPosts, deletePost } from "~/store/slice/postSlice";
 const DashPost = () => {
   const dispatch = useDispatch();
   const { post } = useSelector((state) => state.post);
+  console.log("🚀 ~ DashPost ~ post:", post);
   const { user } = useSelector((state) => state.auth);
+  console.log("🚀 ~ DashPost ~ user:", user);
   const userId = user.data._id;
 
   useEffect(() => {
-    dispatch(getPosts({ userId }));
-  }, [dispatch, userId]);
+    dispatch(getPosts({}));
+  }, [dispatch]);
 
   const handleDeletePost = (id) => {
     if (window.confirm("Are you sure you want to delete this post")) {

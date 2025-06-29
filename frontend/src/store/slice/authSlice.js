@@ -84,6 +84,7 @@ export const getUser = createAsyncThunk("auth/getUser", async ({ userId }) => {
   const response = await authorizeAxiosInstance.get(
     `${import.meta.env.VITE_BACKEND_URL}/api/auth/getuser/${userId}`
   );
+  console.log(response.data);
 
   return response.data;
 });
@@ -93,6 +94,7 @@ const authSlice = createSlice({
   initialState: {
     user: [],
     users: [],
+    currentUser: null,
     loading: false,
     error: null,
   },
@@ -121,7 +123,7 @@ const authSlice = createSlice({
       .addCase(GetCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.user = action.payload;
+        state.currentUser = action.payload;
       })
       .addCase(UpdateUser.fulfilled, (state, action) => {
         state.loading = false;

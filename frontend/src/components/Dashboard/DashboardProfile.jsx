@@ -10,13 +10,14 @@ import { Link } from "react-router-dom";
 const DashboardProfile = () => {
   const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.auth);
+  const { currentUser } = useSelector((state) => state.auth);
+  console.log("🚀 ~ DashboardProfile ~ user:", currentUser);
   const filePickerRef = useRef();
   const [formInput, setFormInput] = useState({
     username: "",
     password: "",
   });
-  const id = user.data._id;
+  const id = currentUser?.data?._id;
 
   useEffect(() => {
     dispatch(GetCurrentUser());
@@ -80,7 +81,7 @@ const DashboardProfile = () => {
           className="w-32 h-32 cursor-pointer shadow-md overflow-hidden rounded-full self-center"
         >
           <img
-            src={user?.data?.avatar}
+            src={currentUser?.data?.avatar}
             alt="avatar"
             className="rounded-full w-full h-full object-cover border-8 border-[lightgray]"
           />
@@ -91,7 +92,7 @@ const DashboardProfile = () => {
           type="email"
           id="email"
           placeholder="email"
-          defaultValue={user?.data?.email}
+          defaultValue={currentUser?.data?.email}
         />
         <TextInput
           type="text"
@@ -99,7 +100,7 @@ const DashboardProfile = () => {
           placeholder="username"
           value={formInput.name}
           onChange={handleOnChange}
-          defaultValue={user?.data?.username}
+          defaultValue={currentUser?.data?.username}
         />
         <TextInput
           type="password"
@@ -114,7 +115,7 @@ const DashboardProfile = () => {
         >
           Update
         </Button>
-        {user.data.role === "admin" && (
+        {currentUser?.data?.role === "admin" && (
           <Link to={"/admin/create-post"}>
             <Button
               type="button"

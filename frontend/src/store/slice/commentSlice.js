@@ -26,11 +26,25 @@ export const getPostComments = createAsyncThunk(
   }
 );
 
+export const likeComment = createAsyncThunk(
+  "comment/likeComment",
+  async ({ commentId }) => {
+    const response = await authorizeAxiosInstance.put(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/api/comments/likeComment/${commentId}`
+    );
+
+    return response.data;
+  }
+);
+
 const commentSlice = createSlice({
   name: "comment",
   initialState: {
     comments: null,
     postComments: null,
+    like: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -40,6 +54,9 @@ const commentSlice = createSlice({
       })
       .addCase(getPostComments.fulfilled, (state, action) => {
         state.postComments = action.payload;
+      })
+      .addCase(likeComment.fulfilled, (state, action) => {
+        state.like = action.payload;
       });
   },
 });

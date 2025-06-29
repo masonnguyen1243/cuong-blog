@@ -1,15 +1,21 @@
 import { Button, Textarea } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Comment from "~/components/Comment/Comment";
-import { createComment, getPostComments } from "~/store/slice/commentSlice";
+import {
+  createComment,
+  getPostComments,
+  likeComment,
+} from "~/store/slice/commentSlice";
 
 const CommentSection = ({ postId }) => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.auth);
   const { postComments } = useSelector((state) => state.comment);
+  console.log("🚀 ~ CommentSection ~ postComments:", postComments);
   const [comment, setComment] = useState("");
 
   const handleSubmit = (e) => {
@@ -23,7 +29,7 @@ const CommentSection = ({ postId }) => {
       .promise(
         dispatch(
           createComment({
-            userId: user.data._id,
+            userId: currentUser.data._id,
             postId: postId,
             content: comment,
           })
@@ -36,6 +42,7 @@ const CommentSection = ({ postId }) => {
         if (!res.error) {
           toast.success(res.payload.message);
           setComment("");
+          dispatch(getPostComments({ postId }));
         }
       });
   };
@@ -44,13 +51,27 @@ const CommentSection = ({ postId }) => {
     dispatch(getPostComments({ postId }));
   }, [dispatch, postId]);
 
+  const handleLike = (commentId) => {
+    try {
+      if (!currentUser) {
+        navigate("/sign-in");
+        return;
+      }
+
+      dispatch(likeComment({ commentId }));
+      dispatch(getPostComments({ postId }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
-      {user ? (
+      {currentUser ? (
         <div className="flex items-center gap-1 my-5 text-gray-500 text-sm">
           <p>Sign in as: </p>
           <img
-            src={user?.data?.avatar}
+            src={currentUser?.data?.avatar}
             alt="avatar-pic"
             className="h-5 w-5 object-cover rounded-full"
           />
@@ -58,7 +79,7 @@ const CommentSection = ({ postId }) => {
             to={"/dashboard?tab=profile"}
             className="text-xs text-cyan-600 hover:underline"
           >
-            @{user?.data?.username}
+            @{currentUser?.data?.username}
           </Link>
         </div>
       ) : (
@@ -69,7 +90,7 @@ const CommentSection = ({ postId }) => {
           </Link>
         </div>
       )}
-      {user && (
+      {currentUser && (
         <form
           onSubmit={handleSubmit}
           className="border border-teal-500 rounded-md p-3"
@@ -106,7 +127,7 @@ const CommentSection = ({ postId }) => {
           </div>
 
           {postComments?.data?.map((com, index) => (
-            <Comment key={index} comment={com} />
+            <Comment key={index} comment={com} onLike={handleLike} />
           ))}
         </>
       )}

@@ -24,7 +24,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const path = useLocation().pathname;
-  const { user, loading, error } = useSelector((state) => state.auth);
+  const { currentUser, loading, error } = useSelector((state) => state.auth);
   const { theme } = useSelector((state) => state.theme);
 
   const handleLogout = () => {
@@ -76,14 +76,17 @@ const Header = () => {
           </Button>
 
           <div className="relative">
-            {user ? (
+            {currentUser ? (
               <Dropdown
                 arrowIcon={false}
                 inline
                 label={
                   <Avatar
                     alt="user"
-                    img={user?.data?.rest?.avatar || user?.data?.avatar}
+                    img={
+                      currentUser?.data?.rest?.avatar ||
+                      currentUser?.data?.avatar
+                    }
                     rounded
                     className="cursor-pointer"
                   />
@@ -91,10 +94,12 @@ const Header = () => {
               >
                 <DropdownHeader className="flex items-center gap-2 justify-center flex-col">
                   <span className="black text-sm select-none">
-                    @{user?.data?.rest?.username || user?.data?.username}
+                    @
+                    {currentUser?.data?.rest?.username ||
+                      currentUser?.data?.username}
                   </span>
                   <span className="black text-sm font-medium truncate select-none">
-                    {user?.data?.rest?.email || user?.data?.email}
+                    {currentUser?.data?.rest?.email || currentUser?.data?.email}
                   </span>
                 </DropdownHeader>
                 <Link to={"/dashboard?tab=profile"}>

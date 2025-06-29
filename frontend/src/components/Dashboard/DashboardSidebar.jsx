@@ -22,7 +22,7 @@ const DashboardSidebar = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
 
-  const { user } = useSelector((state) => state.auth);
+  const { currentUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -53,7 +53,7 @@ const DashboardSidebar = () => {
             <SidebarItem
               active={tab === "profile"}
               icon={HiUser}
-              label={`${user?.data?.role === "user" ? "User" : "Admin"}`}
+              label={`${currentUser?.data?.role === "user" ? "User" : "Admin"}`}
               labelColor="dark"
               className="cursor-pointer"
               as={"div"}
@@ -61,7 +61,7 @@ const DashboardSidebar = () => {
               Profile
             </SidebarItem>
           </Link>
-          {user?.data?.role === "admin" && (
+          {currentUser?.data?.role === "admin" && (
             <Link to={"/dashboard?tab=posts"}>
               <SidebarItem
                 active={tab === "posts"}
@@ -74,7 +74,7 @@ const DashboardSidebar = () => {
               </SidebarItem>
             </Link>
           )}
-          {user?.data?.role === "admin" && (
+          {currentUser?.data?.role === "admin" && (
             <Link to={"/dashboard?tab=users"}>
               <SidebarItem
                 active={tab === "users"}
