@@ -20,11 +20,13 @@ import UpdatePost from "~/components/Post/UpdatePost";
 
 // Others
 import NotFound from "~/pages/404Page";
+import ScrollToTop from "~/components/Common/ScrollToTop";
 
 const App = () => {
   return (
     <div>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<PublicLayout />}>

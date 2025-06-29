@@ -4,14 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from "~/store/slice/postSlice";
 import { Button } from "flowbite-react";
 import CallToAction from "~/components/Post/CallToAction";
-import CommentSection from "~/Comment/CommentSection";
+import CommentSection from "~/components/Comment/CommentSection";
 
 const PostPage = () => {
   const dispatch = useDispatch();
   const { postSlug } = useParams();
   const { post } = useSelector((state) => state.post);
   const selectedPost = post?.data?.posts[0];
-  console.log("🚀 ~ PostPage ~ selectedPost:", selectedPost);
 
   useEffect(() => {
     dispatch(getPosts({ slug: postSlug }));
