@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from "~/store/slice/postSlice";
 import { Button } from "flowbite-react";
 import CallToAction from "~/components/Post/CallToAction";
+import CommentSection from "~/Comment/CommentSection";
 
 const PostPage = () => {
   const dispatch = useDispatch();
@@ -57,6 +58,8 @@ const PostPage = () => {
       <div className="max-w-4xl mx-auto w-full">
         <CallToAction />
       </div>
+
+      <CommentSection postId={selectedPost?._id} />
     </div>
   );
 };
