@@ -80,6 +80,14 @@ export const deleteUser = createAsyncThunk("auth/deleteUser", async (id) => {
   return id;
 });
 
+export const getUser = createAsyncThunk("auth/getUser", async ({ userId }) => {
+  const response = await authorizeAxiosInstance.get(
+    `${import.meta.env.VITE_BACKEND_URL}/api/auth/getuser/${userId}`
+  );
+
+  return response.data;
+});
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -137,6 +145,11 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.users = state.users.filter((p) => p._id !== action.payload);
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = action.payload;
       });
   },
 });

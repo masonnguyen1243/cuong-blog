@@ -30,3 +30,15 @@ export const createComment = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const getPostComments = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const comments = await Comment.find({ postId }).sort({ createdAt: -1 });
+
+    return res.status(200).json({ success: true, data: comments });
+  } catch (error) {
+    console.error(`Error in create getPostComments controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};

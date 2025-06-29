@@ -4,6 +4,7 @@ import {
   changeAvatar,
   deleteUser,
   getCurrentUser,
+  getUser,
   getUsers,
   googleLogin,
   logout,
@@ -41,5 +42,7 @@ router.post(
 );
 
 router.get("/getusers", verifyToken, isAdmin, getUsers);
+
+router.get("/getuser/:userId", getUser);
 
 export default router;

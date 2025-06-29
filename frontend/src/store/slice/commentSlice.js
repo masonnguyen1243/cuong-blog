@@ -13,16 +13,34 @@ export const createComment = createAsyncThunk(
   }
 );
 
+export const getPostComments = createAsyncThunk(
+  "comment/getPostComments",
+  async ({ postId }) => {
+    const response = await authorizeAxiosInstance.get(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/api/comments/getPostComments/${postId}`
+    );
+
+    return response.data;
+  }
+);
+
 const commentSlice = createSlice({
   name: "comment",
   initialState: {
     comments: null,
+    postComments: null,
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(createComment.fulfilled, (state, action) => {
-      state.comments = action.payload;
-    });
+    builder
+      .addCase(createComment.fulfilled, (state, action) => {
+        state.comments = action.payload;
+      })
+      .addCase(getPostComments.fulfilled, (state, action) => {
+        state.postComments = action.payload;
+      });
   },
 });
 

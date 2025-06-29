@@ -1,16 +1,16 @@
 import { Button, Textarea } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createComment } from "~/store/slice/commentSlice";
+import Comment from "~/components/Comment/Comment";
+import { createComment, getPostComments } from "~/store/slice/commentSlice";
 
 const CommentSection = ({ postId }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const { postComments } = useSelector((state) => state.comment);
   const [comment, setComment] = useState("");
-
-  console.log(user, postId);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,6 +39,10 @@ const CommentSection = ({ postId }) => {
         }
       });
   };
+
+  useEffect(() => {
+    dispatch(getPostComments({ postId }));
+  }, [dispatch, postId]);
 
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
@@ -89,6 +93,22 @@ const CommentSection = ({ postId }) => {
             </Button>
           </div>
         </form>
+      )}
+      {postComments?.data?.length === 0 ? (
+        <p className="text-sm my-5">No comments yet</p>
+      ) : (
+        <>
+          <div className="flex text-sm my-5 items-center gap-1">
+            <p>Comments</p>
+            <div className="border border-gray-500 py-1 px-2 rounded-sm">
+              <p>{postComments?.data?.length}</p>
+            </div>
+          </div>
+
+          {postComments?.data?.map((com, index) => (
+            <Comment key={index} comment={com} />
+          ))}
+        </>
       )}
     </div>
   );
