@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from "~/store/slice/postSlice";
 import { Button } from "flowbite-react";
+import CallToAction from "~/components/Post/CallToAction";
 
 const PostPage = () => {
   const dispatch = useDispatch();
@@ -52,6 +53,10 @@ const PostPage = () => {
         }}
         className="p-3 max-w-2xl mx-auto w-full post-content"
       ></div>
+
+      <div className="max-w-4xl mx-auto w-full">
+        <CallToAction />
+      </div>
     </div>
   );
 };
