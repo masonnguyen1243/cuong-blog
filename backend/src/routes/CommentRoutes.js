@@ -2,6 +2,7 @@ import express from "express";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import {
   createComment,
+  deleteComment,
   editComment,
   getPostComments,
   getUserComment,
@@ -19,5 +20,7 @@ router.put("/likeComment/:commentId", verifyToken, likeComment);
 router.put("/editComment/:commentId", verifyToken, editComment);
 
 router.get("/getUserComment/:commentId", getUserComment);
+
+router.delete("/deleteComment/:commentId", verifyToken, deleteComment);
 
 export default router;

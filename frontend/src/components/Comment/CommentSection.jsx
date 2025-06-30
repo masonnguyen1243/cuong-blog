@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Comment from "~/components/Comment/Comment";
 import {
   createComment,
+  deleteComment,
   getPostComments,
   likeComment,
 } from "~/store/slice/commentSlice";
@@ -15,7 +16,6 @@ const CommentSection = ({ postId }) => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.auth);
   const { postComments } = useSelector((state) => state.comment);
-  // console.log("🚀 ~ CommentSection ~ postComments:", postComments);
   const [comment, setComment] = useState("");
 
   const handleSubmit = (e) => {
@@ -62,6 +62,21 @@ const CommentSection = ({ postId }) => {
       dispatch(getPostComments({ postId }));
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleDeleteComment = (commentId) => {
+    if (window.confirm("Are you sure you want to delete this user")) {
+      toast
+        .promise(dispatch(deleteComment({ commentId })), {
+          pending: "Loading",
+        })
+        .then((res) => {
+          if (!res.error) {
+            toast.success(res.payload.message);
+            dispatch(getPostComments({ postId }));
+          }
+        });
     }
   };
 
@@ -127,7 +142,13 @@ const CommentSection = ({ postId }) => {
           </div>
 
           {postComments?.data?.map((com) => (
-            <Comment key={com._id} comment={com} onLike={handleLike} />
+            <Comment
+              key={com._id}
+              comment={com}
+              onLike={handleLike}
+              onDelete={handleDeleteComment}
+              postId={postId}
+            />
           ))}
         </>
       )}

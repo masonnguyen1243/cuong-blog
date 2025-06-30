@@ -68,6 +68,19 @@ export const getUserCommnet = createAsyncThunk(
   }
 );
 
+export const deleteComment = createAsyncThunk(
+  "comment/deleteComment",
+  async ({ commentId }) => {
+    await authorizeAxiosInstance.delete(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/api/comments/deleteComment/${commentId}`
+    );
+
+    return commentId;
+  }
+);
+
 const commentSlice = createSlice({
   name: "comment",
   initialState: {
@@ -93,6 +106,9 @@ const commentSlice = createSlice({
       })
       .addCase(getUserCommnet.fulfilled, (state, action) => {
         state.userComment = action.payload;
+      })
+      .addCase(deleteComment.fulfilled, (state, action) => {
+        state.postComments = action.payload;
       });
   },
 });

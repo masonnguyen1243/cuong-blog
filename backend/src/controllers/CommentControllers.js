@@ -139,3 +139,31 @@ export const getUserComment = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const deleteComment = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+    const userId = req.user.userId;
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Comment not found" });
+    }
+
+    if (comment.userId.toString() !== userId) {
+      return res.status(400).json({
+        success: false,
+        message: "You are not alowed to delete this comment",
+      });
+    }
+
+    await comment.deleteOne();
+    return res
+      .status(200)
+      .json({ success: true, message: "Deleted successfully!" });
+  } catch (error) {
+    console.error(`Error in create deleteComment controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};

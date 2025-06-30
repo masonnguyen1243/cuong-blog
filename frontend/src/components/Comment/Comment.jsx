@@ -4,9 +4,13 @@ import { useEffect, useState } from "react";
 import { FaThumbsUp } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { editComment, getUserCommnet } from "~/store/slice/commentSlice";
+import {
+  editComment,
+  getPostComments,
+  getUserCommnet,
+} from "~/store/slice/commentSlice";
 
-const Comment = ({ comment, onLike }) => {
+const Comment = ({ comment, onLike, onDelete, postId }) => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
@@ -47,6 +51,7 @@ const Comment = ({ comment, onLike }) => {
       .then((res) => {
         toast.success(res.payload.message);
         setIsEditing(false);
+        dispatch(getPostComments({ postId }));
       });
   };
 
@@ -120,13 +125,22 @@ const Comment = ({ comment, onLike }) => {
               {currentUser &&
                 currentUser.data._id.toString() ===
                   comment.userId.toString() && (
-                  <button
-                    type="button"
-                    onClick={handleEditComment}
-                    className="text-gray-400 hover:text-blue-500 cursor-pointer"
-                  >
-                    Edit
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleEditComment}
+                      className="text-gray-400 hover:text-blue-500 cursor-pointer"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDelete(comment._id)}
+                      className="text-gray-400 hover:text-blue-500 cursor-pointer"
+                    >
+                      Delete
+                    </button>
+                  </>
                 )}
             </div>
           </>
