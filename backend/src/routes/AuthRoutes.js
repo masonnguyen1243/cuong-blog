@@ -4,7 +4,6 @@ import {
   changeAvatar,
   deleteUser,
   getCurrentUser,
-  getUser,
   getUsers,
   googleLogin,
   logout,
@@ -14,7 +13,6 @@ import {
 } from "../controllers/AuthControllers.js";
 import { multerUploadMiddleware } from "../middlewares/multerUploadMiddleware.js";
 import { isAdmin, verifyToken } from "../middlewares/authMiddleware.js";
-import { SubAccountsResponseSubAccountsInnerGroupsInner } from "@getbrevo/brevo";
 
 const router = express.Router();
 
@@ -42,7 +40,5 @@ router.post(
 );
 
 router.get("/getusers", verifyToken, isAdmin, getUsers);
-
-router.get("/getuser/:userId", getUser);
 
 export default router;

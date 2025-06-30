@@ -15,9 +15,7 @@ import { getPosts, deletePost } from "~/store/slice/postSlice";
 const DashPost = () => {
   const dispatch = useDispatch();
   const { post } = useSelector((state) => state.post);
-  console.log("🚀 ~ DashPost ~ post:", post);
   const { user } = useSelector((state) => state.auth);
-  console.log("🚀 ~ DashPost ~ user:", user);
   const userId = user.data._id;
 
   useEffect(() => {
@@ -39,7 +37,7 @@ const DashPost = () => {
 
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 ">
-      {user?.data?.role === "admin" && post?.data?.posts?.length > 0 ? (
+      {user?.data?.rest?.role === "admin" && post?.data?.posts?.length > 0 ? (
         <>
           <Table>
             <TableHead>

@@ -15,7 +15,7 @@ const CommentSection = ({ postId }) => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.auth);
   const { postComments } = useSelector((state) => state.comment);
-  console.log("🚀 ~ CommentSection ~ postComments:", postComments);
+  // console.log("🚀 ~ CommentSection ~ postComments:", postComments);
   const [comment, setComment] = useState("");
 
   const handleSubmit = (e) => {

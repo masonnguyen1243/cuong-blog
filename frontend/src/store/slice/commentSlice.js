@@ -39,12 +39,42 @@ export const likeComment = createAsyncThunk(
   }
 );
 
+export const editComment = createAsyncThunk(
+  "comment/editComment",
+  async ({ commentId, content }) => {
+    const response = await authorizeAxiosInstance.put(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/api/comments/editComment/${commentId}`,
+      {
+        content,
+      }
+    );
+
+    return response.data;
+  }
+);
+
+export const getUserCommnet = createAsyncThunk(
+  "comment/getUserCommnet",
+  async ({ commentId }) => {
+    const response = await authorizeAxiosInstance.get(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/api/comments/getUserComment/${commentId}`
+    );
+
+    return response.data;
+  }
+);
+
 const commentSlice = createSlice({
   name: "comment",
   initialState: {
     comments: null,
     postComments: null,
     like: null,
+    userComment: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -57,6 +87,12 @@ const commentSlice = createSlice({
       })
       .addCase(likeComment.fulfilled, (state, action) => {
         state.like = action.payload;
+      })
+      .addCase(editComment.fulfilled, (state, action) => {
+        state.comments = action.payload;
+      })
+      .addCase(getUserCommnet.fulfilled, (state, action) => {
+        state.userComment = action.payload;
       });
   },
 });
