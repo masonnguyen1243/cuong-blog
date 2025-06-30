@@ -86,7 +86,7 @@ export const editComment = async (req, res) => {
         .json({ success: false, message: "Comment not found" });
     }
 
-    if (comment.userId !== userId) {
+    if (comment.userId.toString() !== userId) {
       return res.status(400).json({
         success: false,
         message: "You are not allowed to edit this comment",
@@ -115,7 +115,10 @@ export const editComment = async (req, res) => {
 export const getUserComment = async (req, res) => {
   try {
     const { commentId } = req.params;
-    const comment = await Comment.findById(commentId);
+    const comment = await Comment.findById(commentId).populate(
+      "userId",
+      "-password"
+    );
     if (!comment) {
       return res
         .status(404)
@@ -123,7 +126,7 @@ export const getUserComment = async (req, res) => {
     }
 
     const user = await User.findById(comment.userId);
-    if (!user) {
+    if (!user || typeof user !== "object") {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });

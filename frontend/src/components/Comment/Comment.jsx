@@ -7,14 +7,24 @@ import { toast } from "react-toastify";
 import { editComment, getUserCommnet } from "~/store/slice/commentSlice";
 
 const Comment = ({ comment, onLike }) => {
+  const [user, setUser] = useState(null);
   const dispatch = useDispatch();
-  const { userComment } = useSelector((state) => state.comment);
-  console.log("🚀 ~ Comment ~ userComment:", userComment);
+  const { currentUser } = useSelector((state) => state.auth);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
 
   useEffect(() => {
-    dispatch(getUserCommnet({ commentId: comment._id }));
+    const fetchUser = async () => {
+      try {
+        const res = await dispatch(
+          getUserCommnet({ commentId: comment._id })
+        ).unwrap();
+        setUser(res.data);
+      } catch (err) {
+        console.error("Failed to fetch comment user:", err.message);
+      }
+    };
+    fetchUser();
   }, [dispatch, comment._id]);
 
   const handleEditComment = () => {
@@ -44,15 +54,15 @@ const Comment = ({ comment, onLike }) => {
     <div className="flex p-4 border-b dark:border-gray-600 text-sm">
       <div className="flex shrink-0 mr-3">
         <img
-          src={userComment?.data.avatar}
-          alt={userComment?.data.username}
+          src={user?.avatar}
+          alt={user?.username}
           className="w-10 h-10 rounded-full bg-gray-200"
         />
       </div>
       <div className="flex-1">
         <div className="flex items-center mb-1">
           <span className="font-bold mr-1 text-xs truncate">
-            {userComment ? `@${userComment.data.username}` : "anonymous user"}
+            {user ? `@${user.username}` : "anonymous user"}
           </span>
           <span className="text-gray-500 text-xs">
             {moment(comment.createdAt).fromNow()}
@@ -94,10 +104,8 @@ const Comment = ({ comment, onLike }) => {
                 type="button"
                 onClick={() => onLike(comment._id)}
                 className={`text-gray-400 hover:text-blue-500 cursor-pointer ${
-                  userComment &&
-                  comment.likes.map((id) =>
-                    id.toString().includes(userComment.data._id)
-                  ) &&
+                  user &&
+                  comment.likes.map((id) => id.toString().includes(user._id)) &&
                   "text-blue-500"
                 }`}
               >
@@ -109,15 +117,17 @@ const Comment = ({ comment, onLike }) => {
                     " " +
                     (comment.numberOfLikes === 1 ? "Like" : "Likes")}
               </p>
-              {userComment && userComment.data._id === comment.userId && (
-                <button
-                  type="button"
-                  onClick={handleEditComment}
-                  className="text-gray-400 hover:text-blue-500 cursor-pointer"
-                >
-                  Edit
-                </button>
-              )}
+              {currentUser &&
+                currentUser.data._id.toString() ===
+                  comment.userId.toString() && (
+                  <button
+                    type="button"
+                    onClick={handleEditComment}
+                    className="text-gray-400 hover:text-blue-500 cursor-pointer"
+                  >
+                    Edit
+                  </button>
+                )}
             </div>
           </>
         )}
