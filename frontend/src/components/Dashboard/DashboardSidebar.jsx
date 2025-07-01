@@ -5,8 +5,10 @@ import {
   SidebarItems,
 } from "flowbite-react";
 import {
+  HiAnnotation,
   HiArrowSmRight,
   HiDocumentText,
+  HiHome,
   HiOutlineUserGroup,
   HiUser,
 } from "react-icons/hi";
@@ -75,6 +77,19 @@ const DashboardSidebar = () => {
             </Link>
           )}
           {currentUser?.data?.role === "admin" && (
+            <Link to={"/dashboard?tab=comments"}>
+              <SidebarItem
+                active={tab === "comments"}
+                icon={HiAnnotation}
+                labelColor="dark"
+                className="cursor-pointer"
+                as={"div"}
+              >
+                Comments
+              </SidebarItem>
+            </Link>
+          )}
+          {currentUser?.data?.role === "admin" && (
             <Link to={"/dashboard?tab=users"}>
               <SidebarItem
                 active={tab === "users"}
@@ -87,6 +102,13 @@ const DashboardSidebar = () => {
               </SidebarItem>
             </Link>
           )}
+          <SidebarItem
+            onClick={() => navigate("/")}
+            icon={HiHome}
+            className="cursor-pointer"
+          >
+            Home Page
+          </SidebarItem>
           <SidebarItem
             onClick={handleLogout}
             icon={HiArrowSmRight}

@@ -40,12 +40,14 @@ const DashUser = () => {
         <>
           <Table>
             <TableHead>
-              <TableHeadCell>Date created</TableHeadCell>
-              <TableHeadCell>User image</TableHeadCell>
-              <TableHeadCell>Username</TableHeadCell>
-              <TableHeadCell>Email</TableHeadCell>
-              <TableHeadCell>Admin</TableHeadCell>
-              <TableHeadCell>Delete</TableHeadCell>
+              <TableRow>
+                <TableHeadCell>Date created</TableHeadCell>
+                <TableHeadCell>User image</TableHeadCell>
+                <TableHeadCell>Username</TableHeadCell>
+                <TableHeadCell>Email</TableHeadCell>
+                <TableHeadCell>Admin</TableHeadCell>
+                <TableHeadCell>Delete</TableHeadCell>
+              </TableRow>
             </TableHead>
             {users?.data?.users?.map((user, index) => (
               <TableBody key={index} className="divide-y">

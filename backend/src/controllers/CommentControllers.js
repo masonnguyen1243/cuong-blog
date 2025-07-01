@@ -167,3 +167,56 @@ export const deleteComment = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const getComments = async (req, res) => {
+  try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.sort === "desc" ? -1 : 1;
+    const comments = await Comment.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalComment = await Comment.countDocuments();
+    const now = new Date();
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+    const lastMonthComments = await Comment.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: { comments, totalComment, lastMonthComments },
+    });
+  } catch (error) {
+    console.error(`Error in create getComments controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const deleteCommentByAdmin = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+    const userId = req.user.userId;
+    const comment = await Comment.findById(commentId);
+    const user = await User.findById(userId);
+    if (!comment) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Comment not found" });
+    }
+
+    await comment.deleteOne();
+    return res
+      .status(200)
+      .json({ success: true, message: "Deleted successfully!" });
+  } catch (error) {
+    console.error(`Error in create deleteComment controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};

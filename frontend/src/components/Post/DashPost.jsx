@@ -41,14 +41,16 @@ const DashPost = () => {
         <>
           <Table>
             <TableHead>
-              <TableHeadCell>Data updated</TableHeadCell>
-              <TableHeadCell>Post image</TableHeadCell>
-              <TableHeadCell>Post title</TableHeadCell>
-              <TableHeadCell>Category</TableHeadCell>
-              <TableHeadCell>
-                <span>Edit</span>
-              </TableHeadCell>
-              <TableHeadCell>Delete</TableHeadCell>
+              <TableRow>
+                <TableHeadCell>Data updated</TableHeadCell>
+                <TableHeadCell>Post image</TableHeadCell>
+                <TableHeadCell>Post title</TableHeadCell>
+                <TableHeadCell>Category</TableHeadCell>
+                <TableHeadCell>
+                  <span>Edit</span>
+                </TableHeadCell>
+                <TableHeadCell>Delete</TableHeadCell>
+              </TableRow>
             </TableHead>
             {post?.data?.posts?.map((post, index) => (
               <TableBody key={index} className="divide-y">

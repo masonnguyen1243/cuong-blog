@@ -11,7 +11,6 @@ const DashboardProfile = () => {
   const dispatch = useDispatch();
 
   const { currentUser } = useSelector((state) => state.auth);
-  console.log("🚀 ~ DashboardProfile ~ user:", currentUser);
   const filePickerRef = useRef();
   const [formInput, setFormInput] = useState({
     username: "",

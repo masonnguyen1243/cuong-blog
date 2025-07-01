@@ -81,6 +81,37 @@ export const deleteComment = createAsyncThunk(
   }
 );
 
+export const deleteCommentByAdmin = createAsyncThunk(
+  "comment/deleteCommentByAdmin",
+  async ({ commentId }) => {
+    await authorizeAxiosInstance.delete(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/api/comments/deleteCommentByAdmin/${commentId}`
+    );
+
+    return commentId;
+  }
+);
+
+export const getAllComments = createAsyncThunk(
+  "comment/getAllComments",
+  async ({ startIndex, limit, sortDirection }) => {
+    const query = new URLSearchParams();
+    if (startIndex) query.append("startIndex", startIndex);
+    if (limit) query.append("limit", limit);
+    if (sortDirection) query.append("sortDirection", sortDirection);
+
+    const response = await authorizeAxiosInstance.get(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/api/comments/getcomments?${query.toString()}`
+    );
+
+    return response.data;
+  }
+);
+
 const commentSlice = createSlice({
   name: "comment",
   initialState: {
@@ -88,6 +119,7 @@ const commentSlice = createSlice({
     postComments: null,
     like: null,
     userComment: null,
+    allComments: [],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -109,6 +141,12 @@ const commentSlice = createSlice({
       })
       .addCase(deleteComment.fulfilled, (state, action) => {
         state.postComments = action.payload;
+      })
+      .addCase(deleteCommentByAdmin.fulfilled, (state, action) => {
+        state.postComments = action.payload;
+      })
+      .addCase(getAllComments.fulfilled, (state, action) => {
+        state.allComments = action.payload;
       });
   },
 });

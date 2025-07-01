@@ -13,7 +13,6 @@ const PostPage = () => {
   const { post } = useSelector((state) => state.post);
   const selectedPost = post?.data?.posts[0];
   const [recentPosts, setRecentPosts] = useState(null);
-  console.log("🚀 ~ PostPage ~ recentPosts:", recentPosts);
 
   useEffect(() => {
     dispatch(getPosts({ slug: postSlug }));

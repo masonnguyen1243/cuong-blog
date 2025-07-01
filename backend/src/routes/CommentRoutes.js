@@ -1,9 +1,11 @@
 import express from "express";
-import { verifyToken } from "../middlewares/authMiddleware.js";
+import { isAdmin, verifyToken } from "../middlewares/authMiddleware.js";
 import {
   createComment,
   deleteComment,
+  deleteCommentByAdmin,
   editComment,
+  getComments,
   getPostComments,
   getUserComment,
   likeComment,
@@ -22,5 +24,14 @@ router.put("/editComment/:commentId", verifyToken, editComment);
 router.get("/getUserComment/:commentId", getUserComment);
 
 router.delete("/deleteComment/:commentId", verifyToken, deleteComment);
+
+router.delete(
+  "/deleteCommentByAdmin/:commentId",
+  verifyToken,
+  isAdmin,
+  deleteCommentByAdmin
+);
+
+router.get("/getcomments", verifyToken, isAdmin, getComments);
 
 export default router;
