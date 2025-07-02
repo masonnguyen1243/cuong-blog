@@ -5,6 +5,7 @@ import {
   SidebarItems,
 } from "flowbite-react";
 import {
+  HiAdjustments,
   HiAnnotation,
   HiArrowSmRight,
   HiDocumentText,
@@ -51,6 +52,19 @@ const DashboardSidebar = () => {
     <Sidebar className="w-full md:w-56">
       <SidebarItems>
         <SidebarItemGroup className="flex flex-col gap-1">
+          {currentUser?.data?.role === "admin" && (
+            <Link to={"/dashboard?tab=dash"}>
+              <SidebarItem
+                active={tab === "dash"}
+                icon={HiAdjustments}
+                labelColor="dark"
+                className="cursor-pointer"
+                as={"div"}
+              >
+                Dashboard
+              </SidebarItem>
+            </Link>
+          )}
           <Link to={"/dashboard?tab=profile"}>
             <SidebarItem
               active={tab === "profile"}
