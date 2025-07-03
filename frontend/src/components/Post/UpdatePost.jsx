@@ -18,7 +18,6 @@ const UpdatePost = () => {
   const { post } = useSelector((state) => state.post);
   //   console.log("🚀 ~ UpdatePost ~ post:", post);
   //   console.log(postId);
-  console.log({ title, category, content, imageFile });
 
   useEffect(() => {
     dispatch(getPosts({ postId }));

@@ -3,6 +3,7 @@ import { isAdmin, verifyToken } from "../middlewares/authMiddleware.js";
 import {
   createPost,
   deletePost,
+  getCurrentPost,
   getPosts,
   updatePost,
 } from "../controllers/PostControllers.js";
@@ -28,5 +29,7 @@ router.put(
   multerUploadMiddleware.upload.single("image"),
   updatePost
 );
+
+router.get("/currentpost/:postId", getCurrentPost);
 
 export default router;

@@ -109,8 +109,6 @@ export const updatePost = async (req, res) => {
     const { id } = req.params;
     const { title, content, category } = req.body;
     const image = req.file;
-    console.log(title, content, category);
-    console.log(image);
 
     const uploadResult = await CloudinaryProvider.streamUpload(
       image?.buffer,
@@ -139,6 +137,24 @@ export const updatePost = async (req, res) => {
     });
   } catch (error) {
     console.error(`Error in create updatePost controller`);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getCurrentPost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Post not found" });
+    }
+
+    return res.status(200).json({ success: true, data: post });
+  } catch (error) {
+    console.error(`Error in create getCurrentPost controller`);
     return res.status(500).json({ success: false, message: error.message });
   }
 };

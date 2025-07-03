@@ -8,7 +8,6 @@ import PostCard from "~/components/Post/PostCard";
 const Home = () => {
   const dispatch = useDispatch();
   const { post } = useSelector((state) => state.post);
-  console.log("🚀 ~ Home ~ post:", post);
 
   useEffect(() => {
     dispatch(getPosts({}));
@@ -53,7 +52,7 @@ const Home = () => {
               to={"/search"}
               className="text-lg text-teal-500 hover:underline text-center"
             >
-              <p>View all posts</p>{" "}
+              <p>View all posts</p>
             </Link>
           </div>
         )}

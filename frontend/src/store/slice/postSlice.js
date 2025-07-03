@@ -74,10 +74,22 @@ export const updatePost = createAsyncThunk(
   }
 );
 
+export const getCurrentPost = createAsyncThunk(
+  "post/getCurrentPost",
+  async ({ postId }) => {
+    const response = await authorizeAxiosInstance.get(
+      `${import.meta.env.VITE_BACKEND_URL}/api/posts/currentpost/${postId}`
+    );
+
+    return response.data;
+  }
+);
+
 const postSlice = createSlice({
   name: "post",
   initialState: {
     post: null,
+    selectedPost: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -98,6 +110,9 @@ const postSlice = createSlice({
         if (index !== -1) {
           state.post[index] = action.payload;
         }
+      })
+      .addCase(getCurrentPost.fulfilled, (state, action) => {
+        state.selectedPost = action.payload;
       });
   },
 });
