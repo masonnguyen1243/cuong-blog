@@ -8,6 +8,8 @@ import {
 } from "../utils/GenerateToken.js";
 import ms from "ms";
 import { CloudinaryProvider } from "../utils/Cloudinary.js";
+import jwt from "jsonwebtoken";
+import { ENV } from "../config/environment.js";
 
 export const signup = async (req, res) => {
   try {
@@ -394,5 +396,35 @@ export const getUsers = async (req, res) => {
   } catch (error) {
     console.error(`Error in getUsers controller`);
     return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const refreshToken = async (req, res) => {
+  try {
+    const clientRefreshToken = req.cookies?.refreshToken;
+    const refreshTokenDecoded = jwt.verify(
+      clientRefreshToken,
+      ENV.JWT_REFRESH_TOKEN_SECRET
+    );
+
+    const user = {
+      userId: refreshTokenDecoded.userId,
+      userRole: refreshTokenDecoded.userRole,
+    };
+
+    const accessToken = generateAccessToken(user.userId, user.userRole);
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: ms("7 days"),
+    };
+
+    res.cookie("accessToken", accessToken, cookieOptions);
+
+    return res.status(202).json({ success: true, accessToken });
+  } catch (error) {
+    console.error(`Error in refreshToken controller`);
+    return res.status(401).json({ success: false, message: "Please sign in!" });
   }
 };

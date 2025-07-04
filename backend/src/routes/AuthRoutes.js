@@ -7,6 +7,7 @@ import {
   getUsers,
   googleLogin,
   logout,
+  refreshToken,
   signin,
   signup,
   updateUser,
@@ -40,5 +41,7 @@ router.post(
 );
 
 router.get("/getusers", verifyToken, isAdmin, getUsers);
+
+router.get("/refresh-token", refreshToken);
 
 export default router;

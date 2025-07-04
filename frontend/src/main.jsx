@@ -12,6 +12,10 @@ const persistor = persistStore(store);
 
 import { ThemeProvider } from "~/components/theme/ThemeProvider";
 
+//
+import { injectStore } from "~/utils/authorizeAxios";
+injectStore(store);
+
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>

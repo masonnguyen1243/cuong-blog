@@ -25,7 +25,6 @@ const DashboardOverview = () => {
   const { users } = useSelector((state) => state.auth);
   const { post } = useSelector((state) => state.post);
   const { allComments } = useSelector((state) => state.comment);
-  console.log({ users, post, allComments });
 
   useEffect(() => {
     dispatch(getUsers());
@@ -86,7 +85,7 @@ const DashboardOverview = () => {
           <div className="flex gap-2 text-sm">
             <span className="flex text-green-500 items-center">
               <HiArrowNarrowUp />
-              {post?.data?.post}
+              {post?.data?.lastMonthPosts}
             </span>
             <div className="text-gray-500">Last month</div>
           </div>
@@ -110,7 +109,7 @@ const DashboardOverview = () => {
               </TableRow>
             </TableHead>
             {users &&
-              users.data.users.map((user) => (
+              users?.data?.users?.map((user) => (
                 <TableBody key={user._id} className="divide-y">
                   <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
                     <TableCell>
@@ -143,7 +142,7 @@ const DashboardOverview = () => {
               </TableRow>
             </TableHead>
             {allComments &&
-              allComments.data.comments.map((comment) => (
+              allComments?.data?.comments?.map((comment) => (
                 <TableBody key={comment._id} className="divide-y">
                   <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
                     <TableCell className="w-96">
@@ -173,7 +172,7 @@ const DashboardOverview = () => {
               </TableRow>
             </TableHead>
             {post &&
-              post.data.posts.map((post) => (
+              post?.data?.posts?.map((post) => (
                 <TableBody key={post._id} className="divide-y">
                   <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
                     <TableCell>

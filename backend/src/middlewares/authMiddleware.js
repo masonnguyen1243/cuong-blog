@@ -5,13 +5,13 @@ export const verifyToken = async (req, res, next) => {
   const clientAccessToken = req.cookies?.accessToken;
 
   if (!clientAccessToken) {
-    return res.status(400).json({ success: false, message: "Invalid Token" });
+    return res.status(401).json({ success: false, message: "Invalid Token" });
   }
 
   try {
     if (!ENV.JWT_ACCESS_TOKEN_SECRET) {
       console.error("JWT Secret Key is not defined.");
-      return res.status(400).json({
+      return res.status(410).json({
         success: false,
         message: "Server configuration error: JWT secret key missing.",
       });
@@ -24,7 +24,7 @@ export const verifyToken = async (req, res, next) => {
     next();
   } catch (error) {
     if (error?.message?.includes("jwt expired")) {
-      return res.status(400).json({ message: "Token expired" });
+      return res.status(401).json({ message: "Token expired" });
     }
 
     return res.status(500).json({ success: false, message: error.message });
@@ -36,7 +36,7 @@ export const isAdmin = async (req, res, next) => {
     next();
   } else {
     return res
-      .status(500)
+      .status(401)
       .json({ succcess: false, message: "REQUIRE ADMIN ROLE!" });
   }
 };

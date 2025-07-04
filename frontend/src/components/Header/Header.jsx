@@ -15,9 +15,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { LogoutUser } from "~/store/slice/authSlice";
+import { GetCurrentUser, LogoutUser } from "~/store/slice/authSlice";
 import { toast } from "react-toastify";
 import { toggleTheme } from "~/store/theme/themeSlice";
+import { useEffect } from "react";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,10 @@ const Header = () => {
   const path = useLocation().pathname;
   const { currentUser, loading, error } = useSelector((state) => state.auth);
   const { theme } = useSelector((state) => state.theme);
+
+  useEffect(() => {
+    dispatch(GetCurrentUser());
+  }, [dispatch]);
 
   const handleLogout = () => {
     toast

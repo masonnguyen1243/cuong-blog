@@ -110,6 +110,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.user = null;
+        state.users = null;
+        state.currentUser = null;
       })
       .addCase(GetCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
